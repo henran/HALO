@@ -1,12 +1,33 @@
-@import url(https://fonts.google.com/specimen/IBM+Plex+Mono);
+@import url('https://fonts.googleapis.com/css?family=Raleway');
 
-html { 
-  background: url(gym1.jpg) no-repeat center fixed; 
-  background-size: cover;
+
+
+body {
+    padding-top: 25px;
+    padding-bottom: 25px;
+    background-image: url("gymi.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Raleway';
+    text-align: center;
+    color: navy;
+    font-weight: bold;
 }
 
-body { 
-  color: white;
-    text-align: center;
-    font-family: fantasy;
+div.transbox {
+    
+    border:1px solid navy;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    background-color:rgba(255, 255, 255, 0.70);
+    max-width: 50%;
+    margin-left: auto;
+    margin-right: auto;    
+}
+
+button {
+    border-bottom-style: groove;
+    border: 1px solid navy;
+    color: navy;
 }

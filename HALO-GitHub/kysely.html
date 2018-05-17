@@ -1,151 +1,83 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
-  <head>
-    <title>Kysely</title>
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link href="tyyli.css" rel="stylesheet" type="text/css"/>
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-118252744-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-118252744-1');
+</script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Kysely koulun liikuntapalveluista</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="tyyli.css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </head>
+<body>
+    <div class="transbox">   
+        <h2>Koulun liikuntapalvelukysely</h2>
+    <form>
+        <div id="lomake"> </div>
+        <button onclick="laheta()">Lähetä</button>
+    </form>
+    </div>
+    <script>
+        var lomakekentta = [];
+        $.getJSON("https://kompilaatio.herokuapp.com/questionnaires/1/questions", function (data) {
+            
+            var items = [];
+            $.each(data, function (key, d) {
+            lomakekentta.push(d.id);
+            items.push(d.question+"<br>");
+                
+                if (d.answertype == "Teksti") {
+                    items.push("<textarea id="+d.id +"></textarea><br>");
+                    }
+                
+                if (d.answertype == "radio") {
+                    for (i = 0; i < d.choices.length; i++) {
+                        items.push("<input type=" + d.answertype + " id=" + d.id + " name=" + d.id + " value=" + d.choices[i].choice + ">" +d.choices[i].choice + "<br>");
+                    }
+                }
+            });
 
-  </head>
-    <body background="images/gym1.jpg">
+            $("<div/>", {
+                html: items.join("")
+            }).appendTo("#lomake");
+        });
+            function laheta(){ 
+                var vastaus = "";
+                var lahetys = [];
+                lahetys.push("[");
+                
+                for (i = 0; i < lomakekentta.length; i++) {
+                
+                    tunnus=lomakekentta[i];
+                    vastaus=document.getElementById(tunnus).value;
+                    ehto=i+1;
+                
+                    
+             if (ehto==lomakekentta.length) {lahetys.push("{'vastaus':'"+vastaus+"','id':'"+tunnus+"'}");}
+            else {lahetys.push("{'vastaus':'"+vastaus+"','id':'"+tunnus+"'}");}       
+             }
+              
+            lahetys.push("]");
+                
+            jsonData=lahetys.join(" ");
+            alert(jsonData);
 
-         <h1>Digiprojekti kysely</h1>
-  <br>
-  <form>
-  <div>
-  <table width="400" align="center">
-  <p>Sukupuoli</p>
-    <tr>
-      <td><label>
-        <input type="radio" name="RadioGroup5" value="radio" id="RadioGroup5_0">
-        Mies</label></td>
-    </tr>
-    <tr>
-      <td><label>
-        <input type="radio" name="RadioGroup5" value="radio" id="RadioGroup5_1">
-        Nainen</label></td>
-    </tr>
-  </table>
-  <br>
-  <div align="center">
-  <p>Oletko käyttänyt koulun tarjoamia liikuntapalveluja?</p>
-  <textarea id="rooli"></textarea>
-  </div>
-  <br>
-  <table width="400" align="center">
-  <p>Oletko käyttänyt koulun tarjoamia liikuntapalveluja?</p>
-    <tr>
-      <td><label>
-        <input type="radio" name="RadioGroup1" value="radio" id="RadioGroup1_0">
-      Kyllä</label></td>
-    </tr>
-    <tr>
-      <td><label>
-        <input type="radio" name="RadioGroup1" value="radio" id="RadioGroup1_1">
-      En</label></td>
-    </tr>
-  </table>
-  <br>
-  <table width="400" align="center">
-  <p>Tarjoaako koulu tarpeeksi liikuntapalveluja opiskelijoille?</p>
-    <tr>
-      <td><label>
-        <input type="radio" name="RadioGroup2" value="radio" id="RadioGroup2_0">
-       Kyllä</label></td>
-    </tr>
-    <tr>
-      <td><label>
-        <input type="radio" name="RadioGroup2" value="radio" id="RadioGroup2_1">
-        Ei</label></td>
-    </tr>
-  </table>
-  <br>
-  <table width="400" align="center">
-    <br>
-  <div align="center">
-  <p>Mitä liikuntapalveluja käytät?</p>
-  <textarea id="rooli"></textarea>
-  </div>
-  <br>
-  </table>
-  <br>
-  <p>Kuinka usein käytät koulun tarjoamia liikuntapalveluja?</p>
-  <table width="400" align="center">
-    <tr>
-      <td><label>
-        <input type="radio" name="RadioGroup6" value="radio" id="RadioGroup6_0">
-        En lainkaan</label></td>
-    </tr>
-    <tr>
-      <td><label>
-        <input type="radio" name="RadioGroup6" value="radio" id="RadioGroup6_1">
-        1-2krt/vko3-5krt/vko/yli 5krt/vko </label></td>
-    </tr>
-    <tr>
-      <td><label>
-        <input type="radio" name="RadioGroup6" value="radio" id="RadioGroup6_2">
-        3-5krt/vko </label></td>
-    </tr>
-    <tr>
-      <td><label>
-        <input type="radio" name="RadioGroup6" value="radio" id="RadioGroup6_3">
-       yli 5krt/vko</label></td>
-    </tr>
-  </table>
-  </div>
-      <table width="400" align="center">
-    <br>
-  <div align="center">
-  <p>Mitä koulu voisi tarjota, mistä voisit olla kiinnostunut?</p>
-  <textarea id="rooli"></textarea>
-  </div>
-  <br>
-  </table>
-      <table width="400" align="center">
-    <br>
-  <div align="center">
-  <p>Mitä mieltä olet palveluista?</p>
-  <textarea id="rooli"></textarea>
-  </div>
-  <br>
-  </table>
-      <table width="400" align="center">
-  <p>Olisitko valmis maksamaan tietyistä palveluista?</p>
-    <tr>
-      <td><label>
-        <input type="radio" name="RadioGroup1" value="radio" id="RadioGroup1_0">
-      Kyllä</label></td>
-    </tr>
-    <tr>
-      <td><label>
-        <input type="radio" name="RadioGroup1" value="radio" id="RadioGroup1_1">
-      En</label></td>
-    </tr>
-  </table>
-       <table width="400" align="center">
-    <br>
-  <div align="center">
-  <p>Miten kehittäisit koulun tarjoamia liikuntapalveluja?</p>
-  <textarea id="rooli"></textarea>
-  </div>
-  <br>
-  </table>
-       <table width="400" align="center">
-    <br>
-  <div align="center">
-  <p>Miten HH voisi mainostaa palveluita paremmin?</p>
-  <textarea id="rooli"></textarea>
-  </div>
-  <br>
-  </table>
-     
-  <div align="center">
-  <input type="submit">
-  </div>
-  </form>
-  <br>
-  
-
-  </body>
+                $.ajax({
+    url: 'https://kompilaatio.herokuapp.com/questionnaires/1/questions',
+    type: 'POST',
+    dataType: 'json',
+    data: jsonData, 
+    success: function() { alert('POST completed. Data:' + myJSON)}
+});
+        }
+        
+    </script>
+</body>
 </html>

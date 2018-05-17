@@ -39,7 +39,7 @@
                 
                 if (d.answertype == "radio") {
                     for (i = 0; i < d.choices.length; i++) {
-                        items.push("<input type=" + d.answertype + " id=" + d.id + " name=" + d.id + " value=" + d.choices[i].choice + ">" +d.choices[i].choice + "<br>");
+                        items.push("<input type=" + d.answertype + " id=" + d.id + " name=" + d.id + " value=" + d.choices[i].id + ">" +d.choices[i].choice + "<br>");
                     }
                 }
             });
@@ -51,7 +51,6 @@
             function laheta(){ 
                 var vastaus = "";
                 var lahetys = [];
-                lahetys.push("[");
                 
                 for (i = 0; i < lomakekentta.length; i++) {
                 
@@ -60,20 +59,31 @@
                     ehto=i+1;
                 
                     
-             if (ehto==lomakekentta.length) {lahetys.push("{'vastaus':'"+vastaus+"','id':'"+tunnus+"'}");}
-            else {lahetys.push("{'vastaus':'"+vastaus+"','id':'"+tunnus+"'}");}       
-             }
-              
-            lahetys.push("]");
+             if (document.getElementById(tunnus).type == "radio") {
+                let data = {
+                    questionid: tunnus,
+                    choiceid: vastaus,
+                };
+            lahetys.push(data);
+            }
+            else {
+                let data = {
+                    questionid: tunnus,
+                    answertext: vastaus,
+                }
+            lahetys.push(data);
+            }
+        }
+            
                 
-            jsonData=lahetys.join(" ");
+            jsonData=JSON.stringify(lahetys);
             alert(jsonData);
 
                 $.ajax({
-    url: 'https://kompilaatio.herokuapp.com/questionnaires/1/questions',
+    url: 'https://kompilaatio.herokuapp.com/questionnaires/1/answers',
     type: 'POST',
     dataType: 'json',
-    data: jsonData, 
+    data: lahetys, 
     success: function() { alert('POST completed. Data:' + myJSON)}
 });
         }
